@@ -4,16 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "bench": "vitest bench"
+    "bench": "vitest bench",
+    "bench:browser": "tsx src/browser-bench.ts"
   },
   "dependencies": {
-    "axe-core": "latest",
-    "@accesslint/core": "latest"
+    "@accesslint/core": "latest",
+    "axe-core": "latest"
   },
   "devDependencies": {
-    "vitest": "^3.0.0",
     "jsdom": "^25.0.0",
+    "playwright": "^1.58.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
     "vite": "^6.0.0",
-    "typescript": "^5.7.0"
+    "vitest": "^3.0.0"
   }
 }
