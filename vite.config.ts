@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [codspeedPlugin()],
   test: {
     environment: "jsdom",
+    hookTimeout: 60_000,
     benchmark: {
       include: ["src/**/*.bench.ts"],
     },
