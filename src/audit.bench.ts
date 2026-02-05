@@ -15,12 +15,8 @@ const mediumDoc = new JSDOM(mediumHtml).window.document;
 const largeDoc = new JSDOM(largeHtml).window.document;
 
 describe("audit – 100 elements", () => {
-  beforeAll(() => {
-    axe.setup(smallDoc);
-  });
-  afterAll(() => {
-    axe.teardown();
-  });
+  beforeAll(() => axe.setup(smallDoc));
+  afterAll(() => axe.teardown());
 
   bench("axe-core", async () => {
     await axe.run(smallDoc);
@@ -32,12 +28,8 @@ describe("audit – 100 elements", () => {
 });
 
 describe("audit – 500 elements", () => {
-  beforeAll(() => {
-    axe.setup(mediumDoc);
-  });
-  afterAll(() => {
-    axe.teardown();
-  });
+  beforeAll(() => axe.setup(mediumDoc));
+  afterAll(() => axe.teardown());
 
   bench("axe-core", async () => {
     await axe.run(mediumDoc);
@@ -49,26 +41,14 @@ describe("audit – 500 elements", () => {
 });
 
 describe("audit – 2k elements", () => {
-  beforeAll(() => {
-    axe.setup(largeDoc);
-  });
-  afterAll(() => {
-    axe.teardown();
-  });
+  beforeAll(() => axe.setup(largeDoc));
+  afterAll(() => axe.teardown());
 
-  bench(
-    "axe-core",
-    async () => {
-      await axe.run(largeDoc);
-    },
-    { time: 1000 },
-  );
+  bench("axe-core", async () => {
+    await axe.run(largeDoc);
+  }, { time: 1000 });
 
-  bench(
-    "@accesslint/core",
-    () => {
-      runAudit(largeDoc);
-    },
-    { time: 1000 },
-  );
+  bench("@accesslint/core", () => {
+    runAudit(largeDoc);
+  }, { time: 1000 });
 });
