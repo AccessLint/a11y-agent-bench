@@ -37,7 +37,7 @@ npm run bench:web -- --size=10 --timeout=15000  # quick test
 
 ### Site Selection
 
-Sites are sampled from the [Chrome UX Report (CrUX)](https://developer.chrome.com/docs/crux) top sites list, the same population used by studies like the [WebAIM Million](https://webaim.org/projects/million/). CrUX includes origins that are publicly indexable and have sufficient real Chrome user traffic, which naturally biases toward mainstream, well-known websites.
+Sites are sampled from the [Chrome UX Report (CrUX)](https://developer.chrome.com/docs/crux) top sites list. CrUX includes origins that are publicly indexable and have sufficient real Chrome user traffic, which naturally biases toward mainstream, well-known websites. (The [WebAIM Million](https://webaim.org/projects/million/) uses the [Tranco](https://tranco-list.eu/) list, a related but distinct ranking.)
 
 The CrUX list is sourced from [crux-top-lists](https://github.com/zakird/crux-top-lists), a monthly snapshot of the Chrome top million websites pulled from public CrUX data in Google BigQuery.
 
@@ -54,7 +54,7 @@ For each sampled site, a Chromium browser page:
 3. Runs both audit tools sequentially, measuring wall-clock execution time
 4. Collects violation summaries (rule IDs, WCAG criteria, element counts)
 
-Both tools run with all rules enabled against the fully-rendered DOM. Sites that fail to load (timeouts, connection errors, CSP blocks) are recorded as errors and excluded from aggregate statistics.
+Both tools run with all rules enabled against the DOM after `DOMContentLoaded` (HTML parsed, but async resources like images may still be loading). Sites that fail to load (timeouts, connection errors, CSP blocks) are recorded as errors and excluded from aggregate statistics.
 
 ### Performance Metrics
 
