@@ -109,3 +109,5 @@ export const SMALL_SIZE = 100;
 export const MEDIUM_SIZE = 500;
 /** ~2,000 elements */
 export const LARGE_SIZE = 2_000;
+/** ~5,000 elements */
+export const XLARGE_SIZE = 5_000;

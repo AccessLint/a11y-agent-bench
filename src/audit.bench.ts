@@ -1,12 +1,13 @@
 import { describe, bench } from "vitest";
 import { Window } from "happy-dom";
 import { runAudit } from "@accesslint/core";
-import { generateHtml, SMALL_SIZE, MEDIUM_SIZE, LARGE_SIZE } from "./fixtures";
+import { generateHtml, SMALL_SIZE, MEDIUM_SIZE, LARGE_SIZE, XLARGE_SIZE } from "./fixtures";
 
 // Generate HTML strings once
 const smallHtml = generateHtml(SMALL_SIZE);
 const mediumHtml = generateHtml(MEDIUM_SIZE);
 const largeHtml = generateHtml(LARGE_SIZE);
+const xlargeHtml = generateHtml(XLARGE_SIZE);
 
 // Create happy-dom documents
 function createDoc(html: string) {
@@ -17,6 +18,7 @@ function createDoc(html: string) {
 const smallDoc = createDoc(smallHtml);
 const mediumDoc = createDoc(mediumHtml);
 const largeDoc = createDoc(largeHtml);
+const xlargeDoc = createDoc(xlargeHtml);
 
 describe("audit – 100 elements", () => {
   bench("@accesslint/core", () => {
@@ -34,4 +36,10 @@ describe("audit – 2k elements", () => {
   bench("@accesslint/core", () => {
     runAudit(largeDoc);
   }, { time: 1000, iterations: 3, warmupIterations: 1 });
+});
+
+describe("audit – 5k elements", () => {
+  bench("@accesslint/core", () => {
+    runAudit(xlargeDoc);
+  }, { time: 2000, iterations: 3, warmupIterations: 1 });
 });
