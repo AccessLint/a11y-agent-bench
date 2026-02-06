@@ -1,21 +1,21 @@
 # a11y-agent-bench
 
-Performance and concordance benchmarks comparing [axe-core](https://github.com/dequelabs/axe-core) and [@accesslint/core](https://github.com/AccessLint/a11y-agent).
+Performance benchmarks for [@accesslint/core](https://github.com/AccessLint/a11y-agent).
 
 ## Benchmarks
 
 ### ACT-Based DOM (Vitest)
 
-Runs both tools against HTML documents composed from W3C ACT (Accessibility Conformance Testing) test cases — the same fixtures used by `@accesslint/core`'s own test suite. Documents are built at varying sizes (100, 500, 2,000 elements).
+Benchmarks `@accesslint/core` against HTML documents composed from W3C ACT (Accessibility Conformance Testing) test cases — the same fixtures used by the library's own test suite. Documents are built at varying sizes (100, 500, 2,000 elements).
 
 ```bash
-npm run bench          # Vitest benchmarks
-npm run bench:browser  # Playwright benchmarks on the same ACT-based documents
+npm run bench          # Vitest benchmarks (happy-dom)
+npm run bench:browser  # Playwright benchmarks (Chromium)
 ```
 
 ### Real-World Websites
 
-Audits a sample of real websites with both tools in a Chromium browser, collecting performance timing and concordance data.
+Audits a sample of real websites in a Chromium browser, collecting performance timing.
 
 ```bash
 npm run bench:web                               # 1,000 sites (default)
@@ -51,7 +51,7 @@ This ensures the benchmark exercises real violation detection paths, not just th
 
 ### Site Selection
 
-Sites are sampled from the [Chrome UX Report (CrUX)](https://developer.chrome.com/docs/crux) top sites list. CrUX includes origins that are publicly indexable and have sufficient real Chrome user traffic, which naturally biases toward mainstream, well-known websites. (The [WebAIM Million](https://webaim.org/projects/million/) uses the [Tranco](https://tranco-list.eu/) list, a related but distinct ranking.)
+Sites are sampled from the [Chrome UX Report (CrUX)](https://developer.chrome.com/docs/crux) top sites list. CrUX includes origins that are publicly indexable and have sufficient real Chrome user traffic, which naturally biases toward mainstream, well-known websites.
 
 The CrUX list is sourced from [crux-top-lists](https://github.com/zakird/crux-top-lists), a monthly snapshot of the Chrome top million websites pulled from public CrUX data in Google BigQuery.
 
@@ -64,36 +64,16 @@ Before sampling, the CrUX list is filtered against the [StevenBlack/hosts](https
 For each sampled site, a Chromium browser page:
 
 1. Navigates to the origin URL
-2. Injects both [axe-core](https://www.npmjs.com/package/axe-core) and [@accesslint/core](https://www.npmjs.com/package/@accesslint/core) via script tags
-3. Runs both audit tools sequentially, measuring wall-clock execution time
+2. Injects [@accesslint/core](https://www.npmjs.com/package/@accesslint/core) via script tag
+3. Runs the audit, measuring wall-clock execution time
 4. Collects violation summaries (rule IDs, WCAG criteria, element counts)
 
-Both tools run with all rules enabled against the DOM after `DOMContentLoaded` (HTML parsed, but async resources like images may still be loading). Sites that fail to load (timeouts, connection errors, CSP blocks) are recorded as errors and excluded from aggregate statistics.
+Rules run against the DOM after `DOMContentLoaded` (HTML parsed, but async resources like images may still be loading). Sites that fail to load (timeouts, connection errors, CSP blocks) are recorded as errors and excluded from aggregate statistics.
 
 ### Performance Metrics
 
 Per-site timing is measured with `performance.now()` in the browser context. Aggregate statistics include mean, median, p95, min, and max across all successful audits.
 
-### Concordance
-
-Concordance measures how much the two tools agree on what accessibility violations exist. It is calculated at the **page level per WCAG success criterion**: for each criterion (e.g., 1.1.1, 4.1.2), we check whether each tool found at least one violation of that criterion on the page.
-
-This produces a 2x2 contingency table per criterion:
-
-|  | @accesslint found | @accesslint not found |
-|--|---|---|
-| **axe found** | Both | Axe only |
-| **axe not found** | AL only | Neither |
-
-From this we compute:
-
-- **Agreement rate**: proportion of pages where both tools agree (both found + neither found)
-- **Cohen's kappa**: agreement adjusted for chance, where 1.0 = perfect agreement, 0.0 = agreement no better than random
-
-WCAG criteria are mapped from each tool's native format:
-- axe-core tags rules with patterns like `wcag111` (= WCAG 1.1.1)
-- @accesslint/core rules declare WCAG criteria as `["1.1.1"]`
-
 ### Output
 
-Results are streamed to a JSONL file (one JSON object per line, per site) so data is preserved even if the process is interrupted. Each line contains the full audit result including per-criterion concordance detail.
+Results are streamed to a JSONL file (one JSON object per line, per site) so data is preserved even if the process is interrupted.
