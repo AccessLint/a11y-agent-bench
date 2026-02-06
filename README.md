@@ -1,5 +1,7 @@
 # a11y-agent-bench
 
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json?org=AccessLint&project=a11y-agent-bench&utm_source=badge)](https://codspeed.io/AccessLint/a11y-agent-bench?utm_source=badge)
+
 Performance and concordance benchmarks comparing [axe-core](https://github.com/dequelabs/axe-core) and [@accesslint/core](https://github.com/AccessLint/a11y-agent).
 
 ## Benchmarks
