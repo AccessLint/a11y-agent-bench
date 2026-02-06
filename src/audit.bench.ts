@@ -19,11 +19,11 @@ describe("audit – 100 elements", () => {
     axe.setup(smallDoc);
     await axe.run(smallDoc);
     axe.teardown();
-  }, { warmupIterations: 1 });
+  }, { time: 1000, warmupIterations: 1 });
 
   bench("@accesslint/core", () => {
     runAudit(smallDoc);
-  }, { warmupIterations: 1 });
+  }, { time: 1000, warmupIterations: 1 });
 });
 
 describe("audit – 500 elements", () => {
@@ -31,11 +31,11 @@ describe("audit – 500 elements", () => {
     axe.setup(mediumDoc);
     await axe.run(mediumDoc);
     axe.teardown();
-  }, { warmupIterations: 1 });
+  }, { time: 1000, warmupIterations: 1 });
 
   bench("@accesslint/core", () => {
     runAudit(mediumDoc);
-  }, { warmupIterations: 1 });
+  }, { time: 1000, warmupIterations: 1 });
 });
 
 describe("audit – 2k elements", () => {
@@ -43,9 +43,9 @@ describe("audit – 2k elements", () => {
     axe.setup(largeDoc);
     await axe.run(largeDoc);
     axe.teardown();
-  }, { time: 1000, warmupIterations: 1 });
+  }, { time: 1000, iterations: 3, warmupIterations: 1 });
 
   bench("@accesslint/core", () => {
     runAudit(largeDoc);
-  }, { time: 1000, warmupIterations: 1 });
+  }, { time: 1000, iterations: 3, warmupIterations: 1 });
 });
