@@ -17,3 +17,26 @@ export function extractAxeWcagCriteria(tags: string[]): string[] {
     .map(axeTagToWcagCriterion)
     .filter((c): c is string => c !== null);
 }
+
+/**
+ * Overlapping criteria where the same axe rule tags both a base criterion
+ * and a stricter (higher conformance level) variant. When both appear from
+ * the same rule, keep only the base (lower conformance level) to avoid
+ * double-counting.
+ *
+ * Key = stricter criterion to drop, Value = base criterion that must also be present.
+ */
+const OVERLAPPING_CRITERIA: Record<string, string> = {
+  "2.1.3": "2.1.1", // Keyboard No Exception (AAA) overlaps Keyboard (A)
+};
+
+/**
+ * Deduplicate criteria produced by a single axe rule.
+ * If a rule emits both 2.1.1 and 2.1.3, drop 2.1.3.
+ */
+export function deduplicateOverlapping(criteria: string[]): string[] {
+  return criteria.filter((c) => {
+    const base = OVERLAPPING_CRITERIA[c];
+    return !base || !criteria.includes(base);
+  });
+}

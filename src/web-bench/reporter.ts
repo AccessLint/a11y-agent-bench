@@ -60,6 +60,24 @@ export function printSummary(
     return;
   }
 
+  // DOM element counts (diagnostic for SPA/empty-page detection)
+  const domCounts = ok.map((r) => r.domElementCount);
+  const nearEmpty = ok.filter((r) => r.domElementCount < 10);
+  console.log("\n  DOM Element Counts");
+  console.log(`    Median:          ${median(domCounts).toLocaleString()}`);
+  console.log(`    P95:             ${percentile(domCounts, 95).toLocaleString()}`);
+  console.log(`    Max:             ${Math.max(...domCounts).toLocaleString()}`);
+  console.log(`    Near-empty (<10): ${nearEmpty.length}`);
+
+  // Audit-specific errors
+  const axeErrors = ok.filter((r) => r.axeStatus === "error");
+  const alErrors = ok.filter((r) => r.alStatus === "error");
+  if (axeErrors.length > 0 || alErrors.length > 0) {
+    console.log("\n  Audit Errors (on otherwise successful pages)");
+    console.log(`    axe-core errors:   ${axeErrors.length}`);
+    console.log(`    @accesslint errors: ${alErrors.length}`);
+  }
+
   // Performance
   const axeTimes = ok.map((r) => r.axeTimeMs);
   const alTimes = ok.map((r) => r.alTimeMs);

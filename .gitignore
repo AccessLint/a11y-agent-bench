@@ -1,3 +1,5 @@
 node_modules/
 dist/
 results/
+docs/src/.observablehq/cache/
+docs/dist/

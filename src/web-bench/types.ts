@@ -4,14 +4,22 @@ export interface SiteResult {
   rank: number;
   status: "ok" | "error";
   error?: string;
+  domElementCount: number;
   axeTimeMs: number;
   alTimeMs: number;
+  axeStatus: "ok" | "error";
+  alStatus: "ok" | "error";
+  axeError: string | null;
+  alError: string | null;
   axeViolationCount: number;
   alViolationCount: number;
+  axeIncompleteCount: number;
   /** WCAG criteria found by axe-core, e.g. ["1.1.1", "4.1.2"] */
   axeWcagCriteria: string[];
   /** WCAG criteria found by @accesslint/core */
   alWcagCriteria: string[];
+  /** WCAG criteria from axe-core incomplete results (e.g. bypass with reviewOnFail) */
+  axeIncompleteWcagCriteria: string[];
   criteriaDetail: CriterionPageResult[];
   timestamp: string;
 }
@@ -23,13 +31,21 @@ export interface CriterionPageResult {
   alFound: boolean;
   axeRuleIds: string[];
   alRuleIds: string[];
+  axeNodeCount: number;
+  alNodeCount: number;
 }
 
 /** What page.evaluate returns from the browser context */
 export interface BrowserAuditResult {
+  domElementCount: number;
   axeTimeMs: number;
   alTimeMs: number;
+  axeStatus: "ok" | "error";
+  alStatus: "ok" | "error";
+  axeError: string | null;
+  alError: string | null;
   axeViolations: { id: string; tags: string[]; nodeCount: number; impact: string | null }[];
+  axeIncomplete: { id: string; tags: string[]; nodeCount: number; impact: string | null }[];
   alViolations: { ruleId: string; count: number; impact: string }[];
   alRuleWcagMap: Record<string, string[]>;
 }
